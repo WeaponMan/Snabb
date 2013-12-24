@@ -8,7 +8,7 @@ class PrivilegedRouter extends Router {
         $filename = '';
         $access = false;
         $found = false;
-        $path = self::getCurrentRoute();
+        $path = Router::$route;
         foreach ($this->table as $route) {
             if ($path . '/' === $route[0] or $path === $route[0] . '/' or $path === $route[0]) {
                 $found = file_exists($this->pagesDir . $route[1]);

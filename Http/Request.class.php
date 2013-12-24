@@ -4,9 +4,9 @@ namespace Snabb\Http;
 
 final class Request extends \Snabb\StaticClass {
   const METHOD_GET = 'GET';
-  const METHOD_GET = 'POST';
+  const METHOD_POST = 'POST';
   
-  public static $method, $headers, $https = false, $uri, $query_string, $server_domain, $server_address, $server_port, $source_address, $source_port, $post, $get;
+  public static $method, $headers, $https = false, $uri, $query_string, $server_domain, $server_address, $server_port, $source_address, $source_port, $post, $get, $full_domain, $domain_for_cookie;
 }
 
 Request::$method = &$_SERVER['REQUEST_METHOD'];
@@ -24,4 +24,9 @@ if(isset($_SERVER['REMOTE_PORT']))
   Request::$source_port = (int)$_SERVER['REMOTE_PORT'];
 Request::$post = &$_POST;
 Request::$get = &$_GET;
-unset($_GET, $_POST, $_SERVER);
+Request::$full_domain = (Request::$https ? 'https' : 'http' ) . '://' . $_SERVER['HTTP_HOST'] . ((Request::$server_port == 443 or Request::$server_port == 80) ? '' : ':' . Request::$server_port);
+$domain_without_http = $_SERVER['HTTP_HOST'] .((Request::$server_port == 443 or Request::$server_port == 80) ? '' : ':' . Request::$server_port);
+Request::$domain_for_cookie = $domain_without_http === 'localhost' ? null : $domain_without_http;
+unset($domain_without_http);
+
+

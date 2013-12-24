@@ -15,7 +15,7 @@ namespace Snabb\Routing;
 class SimpleRouter extends Router {
 
     public function findRoute($privilegesFunc = null) {
-        $path = self::getCurrentRoute();
+        $path = Router::$route;
         $filename = '';
 
         if (isset($this->table[$path]))
@@ -37,5 +37,4 @@ class SimpleRouter extends Router {
 
         return $this->pagesDir . $this->not_found_page_path;
     }
-
 }
