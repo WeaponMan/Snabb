@@ -105,7 +105,8 @@ abstract class Connection {
   abstract public function cachedQuery($sql, $seconds);
   abstract public function exec($sql);
   abstract public function backtick($what);
-
+  abstract public function getDriverName();
+  
   final public function bactickArrayValues($array) {
     if(is_array($array)) {
       foreach($array as &$inside)

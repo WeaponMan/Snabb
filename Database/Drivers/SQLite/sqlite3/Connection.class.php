@@ -189,6 +189,7 @@ class Connection extends \Database\Connection
     } while (next($sqlRows) !== false);
     return $queryLine;
   }
+  public function getDriverName() {
+      return "SQLite/sqlite3";
+  }
 }
-
-?>

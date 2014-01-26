@@ -143,4 +143,8 @@ final class Connection extends \Snabb\Database\Connection {
   public function close() {
     mysqli_close($this->mysqli);
   }
+  
+  public function getDriverName() {
+      return "MySQL/mysqlip";
+  }
 }

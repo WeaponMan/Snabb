@@ -40,5 +40,4 @@ class PrivilegedRouter extends Router {
         }
         return $filename;
     }
-
 }

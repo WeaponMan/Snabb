@@ -143,6 +143,8 @@ class Connection extends \Snabb\Database\Connection
   {
     $this->pdo = null;
   }
+  
+  public function getDriverName() {
+      return "PgSQL/PDO";
+  }
 }
-
-?>

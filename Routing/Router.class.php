@@ -1,7 +1,6 @@
 <?php
 namespace Snabb\Routing;
 
-
 abstract class Router extends \Snabb\Object {
 
     protected $table, $pagesDir, $not_found_page_path, $access_denied_page_path;
@@ -28,5 +27,5 @@ abstract class Router extends \Snabb\Object {
 Router::$path =  str_replace('index.php', '', $_SERVER['PHP_SELF']);
 Router::$path_route = str_replace('?' . $_SERVER['QUERY_STRING'], '', $_SERVER['REQUEST_URI']);
 Router::$route = str_replace(Router::$path, '/', str_replace('?' . $_SERVER['QUERY_STRING'], '', $_SERVER['REQUEST_URI']));
-Router::$path_route_args =  htmlentities($_SERVER['REQUEST_URI']);
+Router::$path_route_args = addslashes($_SERVER['REQUEST_URI']);
 

@@ -147,10 +147,11 @@ class Connection extends \Snabb\Database\Connection
     return $this->exec($sql.';');
   }  
   
-  public function close()
-  {
+  public function close() {
     $this->pdo = null;
   }
-}
 
-?>
+  public function getDriverName() {
+      return "MySQL/PDO";
+  }
+}

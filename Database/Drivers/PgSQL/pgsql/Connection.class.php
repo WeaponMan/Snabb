@@ -14,8 +14,7 @@ class Connection extends \Snabb\Database\Connection
   protected static $__getters = array('errmode', 'in_transaction','executedQueries');
   
   public function __construct($host, $user, $password, $database, $port = 5432, $errmode = self::ERRMODE_SILENT, $persistent = true) 
-  {
-    
+  {   
     $this->pg = pg_connect('host='.$host.' port='.$port.' user='.$user.' password='.$password.' dbname='.$database." options='--client_encoding=UTF8'");
     if($this->pg === false)
       throw new \Snabb\Database\Exception(pg_last_error($this->pg));
@@ -125,10 +124,11 @@ class Connection extends \Snabb\Database\Connection
     return $this->exec($sql.';');
   }  
   
-  public function close()
-  {
+  public function close(){
     pg_close($this->pg);
   }
+  
+  public function getDriverName() {
+      return "PgSQL/pgsql";
+  } 
 }
-
-?>

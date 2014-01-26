@@ -191,4 +191,8 @@ class Connection extends \Snabb\Database\Connection {
     } while (next($sqlRows) !== false);
     return $queryLine;
   }
+  
+  public function getDriverName() {
+      return "MySQL/mysql";
+  }
 }
