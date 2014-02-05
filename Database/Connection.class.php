@@ -27,8 +27,6 @@ abstract class Connection {
   public $errorInfo;
   public $errorCode;
 
-  abstract public function __construct($host, $user, $password, $database, $errmode = self::ERRMODE_SILENT, $persistent = true);
-
   final public function setErrmode($errmode) {
     if($this->inTransaction) {
       $this->originalErrmode = $errmode;

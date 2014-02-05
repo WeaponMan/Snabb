@@ -1,39 +1,43 @@
 <?php
 
-namespace Snabb\Database\Drivers\SQLite\PDO;
+namespace Snabb\Database\Drivers\SQLite\sqlite3;
 
 class Result implements \Snabb\Database\Result, \Iterator
 {
-  private $stmt;
+  private $stack_position = 0;
+  private $result_stack;
   private $position = 0;
   private $data_iterable = array();
   
-  public function __construct($stmt) 
+  public function __construct($results) 
   {
-    $this->stmt = $stmt;
+    $this->result_stack = $results;
   }
 
   public function fetch($how = \Snabb\Database\Connection::FETCH_ASSOC, $parameter = null)
   {
     switch($how) {
       case \Snabb\Database\Connection::FETCH_ASSOC:
-        return $this->stmt->fetch(\PDO::FETCH_ASSOC);
+        return $this->result_stack[$this->stack_position]->fetchArray(SQLITE3_ASSOC);
       case \Snabb\Database\Connection::FETCH_NUM:
-        return $this->stmt->fetch(\PDO::FETCH_NUM);
+        return $this->result_stack[$this->stack_position]->fetchArray(SQLITE3_NUM);
       case \Snabb\Database\Connection::FETCH_COLUMN:
-         return $this->stmt->fetchColumn((int)$parameter);
+         $data = $this->result_stack[$this->stack_position]->fetchArray(SQLITE3_NUM);
+        return $data[(int)$parameter];
       default:
-        throw new \Snabb\Database\Exception('Unknown type in  '.__CLASS__.'::'.__METHOD__);
+        throw new\Snabb\Database\Exception('Unknown type in  '.__CLASS__.'::'.__METHOD__);
         break;
     }
   }
   
   public function fetchAll($how = \Snabb\Database\Connection::FETCH_ASSOC, $parameter = null) 
-  {
+  { 
     switch ($how) {
       case \Snabb\Database\Connection::FETCH_ASSOC:
       case \Snabb\Database\Connection::FETCH_NUM:
-          return $this->stmt->fetchAll($how === \Snabb\Database\Connection::FETCH_ASSOC ? \PDO::FETCH_ASSOC : \PDO::FETCH_NUM);
+          $rows = array();
+          while ($row = $this->fetch($how)) $rows[] = $row;
+          return $rows;
       case \Snabb\Database\Connection::FETCH_COLUMN:
         $data = array();
         while($data[] = $this->fetch(\Snabb\Database\Connection::FETCH_COLUMN, $parameter));
@@ -70,7 +74,8 @@ class Result implements \Snabb\Database\Result, \Iterator
   public function nextRowset() 
   {
     $this->position = 0;
-    if(!$this->stmt->nextRowset())
+    $this->stack_position++;
+    if($this->stack_position > count($this->result_stack))
       throw new \Snabb\Database\Exception('Failed in '.__CLASS__.'::'.__METHOD__.' with error: No more results in set.');
   }
 
@@ -97,4 +102,3 @@ class Result implements \Snabb\Database\Result, \Iterator
     return isset($this->data_iterable[$this->position]);
   }
 }
-?>

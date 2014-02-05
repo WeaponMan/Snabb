@@ -5,15 +5,15 @@
  * @property-read bool $in_transaction aktivní transakce
  */
 
-namespace Database\Drivers\SQLite\sqlite3;
+namespace Snabb\Database\Drivers\SQLite\sqlite3;
 
-class Connection extends \Database\Connection 
+class Connection extends \Snabb\Database\Connection 
 {
   private $sqlite3;
   
   protected static $__getters = array('errmode', 'in_transaction','executedQueries');
   
-  public function __construct($filename, $flags, $encryption_key) 
+  public function __construct($filename, $flags = SQLITE3_OPEN_READWRITE, $encryption_key = null, $errmode = self::ERRMODE_SILENT) 
   {
     try
     {
@@ -21,7 +21,7 @@ class Connection extends \Database\Connection
     } 
     catch (\Exception $e)
     {
-      throw new\Snabb\Database\Exception($e->getMessage(), $e->getCode(), $e->getPrevious());
+      throw new \Snabb\Database\Exception($e->getMessage(), $e->getCode(), $e->getPrevious());
     }
     $this->errmode = $errmode;
   }
@@ -187,7 +187,10 @@ class Connection extends \Database\Connection
         $sql .= $znak;
       }
     } while (next($sqlRows) !== false);
-    return $queryLine;
+    if($queryLine)
+        return $queryLine;
+    else
+        return array($queryBlock);
   }
   public function getDriverName() {
       return "SQLite/sqlite3";

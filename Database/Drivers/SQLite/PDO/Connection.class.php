@@ -5,7 +5,7 @@
  * @property-read bool $in_transaction aktivní transakce
  */
 
-namespace \Snabb\Database\Drivers\SQLite\PDO;
+namespace Snabb\Database\Drivers\SQLite\PDO;
 
 class Connection extends \Snabb\Database\Connection 
 {
@@ -13,7 +13,7 @@ class Connection extends \Snabb\Database\Connection
   
   protected static $__getters = array('errmode', 'in_transaction','executedQueries');
   
-  public function __construct($filename) 
+  public function __construct($filename, $errmode = self::ERRMODE_SILENT) 
   {
     try
     {

@@ -189,7 +189,11 @@ class Connection extends \Snabb\Database\Connection {
         $sql .= $znak;
       }
     } while (next($sqlRows) !== false);
-    return $queryLine;
+    
+    if($queryLine)
+        return $queryLine;
+    else
+        return array($queryBlock);
   }
   
   public function getDriverName() {
