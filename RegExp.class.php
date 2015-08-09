@@ -63,7 +63,7 @@ final class RegExp extends \Snabb\Object {
    */
   const MODIFIER_UTF8 = 512;
 
-  private static $modifiersChars = array(
+  private static $modifiersChars = [
     self::MODIFIER_CASE_INSENSITIVE => 'i',
     self::MODIFIER_MULTILINE => 'm',
     self::MODIFIER_SINGLELINE => 's',
@@ -74,7 +74,7 @@ final class RegExp extends \Snabb\Object {
     self::MODIFIER_UNGREEDY => 'U',
     self::MODIFIER_EXTRA => 'X',
     self::MODIFIER_UTF8 => 'u',
-  );
+  ];
 
   private $delimited_pattern;
   private $modifiers;

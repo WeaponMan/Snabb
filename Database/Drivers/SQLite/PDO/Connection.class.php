@@ -11,7 +11,7 @@ class Connection extends \Snabb\Database\Connection
 {
   private $pdo;
   
-  protected static $__getters = array('errmode', 'in_transaction','executedQueries');
+  protected static $__getters = ['errmode', 'in_transaction','executedQueries'];
   
   public function __construct($filename, $errmode = self::ERRMODE_SILENT) 
   {
@@ -47,7 +47,7 @@ class Connection extends \Snabb\Database\Connection
 
   public function exec($sql) 
   {
-    $this->executedQueries[$sql] = array('type' => 'exec', 'duration' => - microtime(true), 'status' => 'OK');
+    $this->executedQueries[$sql] = ['type' => 'exec', 'duration' => - microtime(true), 'status' => 'OK'];
     try
     {
       $exec = $this->pdo->exec($sql);
@@ -80,7 +80,7 @@ class Connection extends \Snabb\Database\Connection
 
   public function query($sql) 
   {
-    $this->executedQueries[$sql] = array('type' => 'query', 'duration' => - microtime(true), 'status' => 'OK');
+    $this->executedQueries[$sql] = ['type' => 'query', 'duration' => - microtime(true), 'status' => 'OK'];
     try
     {
       $query = $this->pdo->query($sql);

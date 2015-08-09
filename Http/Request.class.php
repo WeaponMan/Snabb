@@ -10,7 +10,7 @@ final class Request extends \Snabb\StaticClass {
 }
 
 Request::$method = &$_SERVER['REQUEST_METHOD'];
-Request::$headers = getallheaders();
+Request::$headers = $_SERVER;
 if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')
   Request::$https = true;
 Request::$uri = &$_SERVER['REQUEST_URI'];

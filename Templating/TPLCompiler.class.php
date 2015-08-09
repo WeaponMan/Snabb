@@ -27,12 +27,12 @@ final class TPLCompiler {
   public function compile($tpl_filepath, $cached_tpl_filepath) {
     $left_delimiter_replacement = '@'. \Snabb\Cryptography::random(10).'@';
     $right_delimiter_replacement = '@'.\Snabb\Cryptography::random(10).'@';
-    $tpl_content = preg_replace(array('~\\\\'.preg_quote($this->left_delimiter).'~Ds', '~\\\\'.preg_quote($this->right_delimiter).'~Ds', '~\\\\'.preg_quote($left_delimiter_replacement).'~Ds', '~\\\\'.preg_quote($right_delimiter_replacement).'~Ds'), array($left_delimiter_replacement, $right_delimiter_replacement, '\\'.$this->right_delimiter, '\\'.$this->left_delimiter), file_get_contents($tpl_filepath));
+    $tpl_content = preg_replace(['~\\\\'.preg_quote($this->left_delimiter).'~Ds', '~\\\\'.preg_quote($this->right_delimiter).'~Ds', '~\\\\'.preg_quote($left_delimiter_replacement).'~Ds', '~\\\\'.preg_quote($right_delimiter_replacement).'~Ds'], [$left_delimiter_replacement, $right_delimiter_replacement, '\\'.$this->right_delimiter, '\\'.$this->left_delimiter], file_get_contents($tpl_filepath));
     $html = preg_split('~'.preg_quote($this->left_delimiter).'.*?'.preg_quote($this->right_delimiter).'~Ds', $tpl_content);
     preg_match_all('~'.preg_quote($this->left_delimiter).'\\s*(.*?)\\s*'.preg_quote($this->right_delimiter).'~Ds', $tpl_content, $to_parse);
     list(,$to_parse) = $to_parse;
 
-    for($foreach_from_variables = $opened_tags = array(), $inner_php = false, $foreach_level = $if_level = $while_level = $i = 0, $to_write = $html[0], $size = count($to_parse); $i < $size; $i++) {
+    for($foreach_from_variables = $opened_tags = [], $inner_php = false, $foreach_level = $if_level = $while_level = $i = 0, $to_write = $html[0], $size = count($to_parse); $i < $size; $i++) {
       if(preg_match('~^php$~Dsi', $to_parse[$i])) { #inner php start tag parse
         if($inner_php)
           trigger_error('Unexpected inner php start tag, inner php is already active!', E_USER_ERROR);
@@ -88,7 +88,7 @@ final class TPLCompiler {
         }
         #foreach parse
         elseif(preg_match('~^foreach\\s+('.self::$var_regex_noreference.')\\s+as\\s+(?:('.self::$assignable_var_regex.')\\s+\\=\\>\\s+)?('.self::$assignable_var_regex.')$~Dsi', $to_parse[$i], $foreach_match)) {
-          list(,$foreach_from_variables[]) = $foreach_match = $this->var_parse(\Snabb\Tools\Arrays::selective_keys($foreach_match, array(1, 2, 3)));
+          list(,$foreach_from_variables[]) = $foreach_match = $this->var_parse(\Snabb\Tools\Arrays::selective_keys($foreach_match, [1, 2, 3]));
           $to_parse[$i] = 'foreach('.$foreach_match[1].' as ';
           if($foreach_match[2] !== '')
             $to_parse[$i] .= $foreach_match[2].' => ';
@@ -157,7 +157,7 @@ final class TPLCompiler {
     }
     if($opened_tags)
       trigger_error('Parse error: there are some unclosed tags ('.implode(', ', $opened_tags).')!', E_USER_ERROR);
-    file_put_contents($cached_tpl_filepath, preg_replace('~'.preg_quote($this->php_end_tag.$this->php_start_tag).'~s', '', str_replace(array($left_delimiter_replacement, $right_delimiter_replacement), array($this->left_delimiter, $this->right_delimiter), $to_write)), LOCK_EX);
+    file_put_contents($cached_tpl_filepath, preg_replace('~'.preg_quote($this->php_end_tag.$this->php_start_tag).'~s', '', str_replace([$left_delimiter_replacement, $right_delimiter_replacement], [$this->left_delimiter, $this->right_delimiter], $to_write)), LOCK_EX);
   }
   private function var_parse($string_or_array, &$noescape = false) {
     $was_string = is_string($string_or_array);
@@ -167,7 +167,7 @@ final class TPLCompiler {
       preg_match_all('~'.self::$var_regex.'~Dsi', $source, $vars_match, PREG_SET_ORDER);
       for($i = 0, $source = $no_vars[0], $size = count($vars_match); $i < $size; $i++) {
         #keys
-        $keys = ($vars_match[$i][2] === '' ? array() : explode('.', preg_replace('~^\\.~', '', $vars_match[$i][2])));
+        $keys = ($vars_match[$i][2] === '' ? [] : explode('.', preg_replace('~^\\.~', '', $vars_match[$i][2])));
         #properties and methods
         $properties_methods = '';
         if($keys && ($pos = strpos($keys[($last_key = key(array_slice( $keys, -1, 1, true )))], '->')) !== false){
@@ -177,7 +177,7 @@ final class TPLCompiler {
             array_pop($keys);
         }
         #modifiers
-        $modifiers = ($vars_match[$i][3] === '' ? array() : explode('|', preg_replace('~^\\|~', '', $vars_match[$i][3])));
+        $modifiers = ($vars_match[$i][3] === '' ? [] : explode('|', preg_replace('~^\\|~', '', $vars_match[$i][3])));
         #varname
         $var = '$this->vars['.var_export($vars_match[$i][1], true).']';
         #concat with keys
@@ -213,7 +213,7 @@ final class TPLCompiler {
         #constant name
         $constant = $constants_match[$i][1];
         #modifiers
-        $modifiers = ($constants_match[$i][2] === ''? array():explode('|', preg_replace('~^\\|~', '', $constants_match[$i][2])));
+        $modifiers = ($constants_match[$i][2] === ''? [] :explode('|', preg_replace('~^\\|~', '', $constants_match[$i][2])));
         #add modifiers
         foreach($modifiers as $mod)
           if($mod !== $this->noescape_modifier)

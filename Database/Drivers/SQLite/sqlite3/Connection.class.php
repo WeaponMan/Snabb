@@ -11,7 +11,7 @@ class Connection extends \Snabb\Database\Connection
 {
   private $sqlite3;
   
-  protected static $__getters = array('errmode', 'in_transaction','executedQueries');
+  protected static $__getters = ['errmode', 'in_transaction','executedQueries'];
   
   public function __construct($filename, $flags = SQLITE3_OPEN_READWRITE, $encryption_key = null, $errmode = self::ERRMODE_SILENT) 
   {
@@ -43,7 +43,7 @@ class Connection extends \Snabb\Database\Connection
 
   public function exec($sql) 
   {
-    $this->executedQueries[$sql] = array('type' => 'exec', 'duration' => - microtime(true), 'status' => 'OK');
+    $this->executedQueries[$sql] = ['type' => 'exec', 'duration' => - microtime(true), 'status' => 'OK'];
     $exec = $this->sqlite3->exec($sql);
     $this->executedQueries[$sql]['duration'] += microtime(true);
     if($exec === true)
@@ -71,7 +71,7 @@ class Connection extends \Snabb\Database\Connection
 
   public function query($sql) {
     $queries = $this->multiQuery($sql);
-    $exec_queries = array();
+    $exec_queries = [];
     foreach ($queries as $query)
     {
       $executed = $this->_query($query);
@@ -83,7 +83,7 @@ class Connection extends \Snabb\Database\Connection
   
   public function _query($sql) 
   {
-    $this->executedQueries[$sql] = array('type' => 'query', 'duration' => - microtime(true), 'status' => 'OK');
+    $this->executedQueries[$sql] = ['type' => 'query', 'duration' => - microtime(true), 'status' => 'OK'];
     $query = $this->sqlite3->query($sql);
     $this->executedQueries[$sql]['duration'] += microtime(true);
     if($query !== false)
@@ -144,7 +144,7 @@ class Connection extends \Snabb\Database\Connection
     $escChar = false;
     $sql = '';
     $stringChar = '';
-    $queryLine = array();
+    $queryLine = [];
     $sqlRows = explode("\n", $queryBlock);
     $delimiterLen = strlen($delimiter);
     do {
@@ -174,7 +174,7 @@ class Connection extends \Snabb\Database\Connection
         if (substr($sqlRow, $i, $delimiterLen) === $delimiter and !$inString) 
         {
             $sql = trim($sql);
-            $delimiterMatch = array();
+            $delimiterMatch = [];
             if (preg_match('/^DELIMITER[[:space:]]*([^[:space:]] )$/i', $sql, $delimiterMatch)) {
               $delimiter = $delimiterMatch [1];
               $delimiterLen = strlen($delimiter);
@@ -190,7 +190,7 @@ class Connection extends \Snabb\Database\Connection
     if($queryLine)
         return $queryLine;
     else
-        return array($queryBlock);
+        return [$queryBlock];
   }
   public function getDriverName() {
       return "SQLite/sqlite3";

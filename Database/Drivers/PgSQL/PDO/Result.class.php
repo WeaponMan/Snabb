@@ -6,7 +6,7 @@ class Result implements \Snabb\Database\Result, \Iterator
 {
   private $stmt;
   private $position = 0;
-  private $data_iterable = array();
+  private $data_iterable = [];
   
   public function __construct($stmt) 
   {
@@ -33,19 +33,19 @@ class Result implements \Snabb\Database\Result, \Iterator
   public function fetchAll($how = \Snabb\Database\Connection::FETCH_ASSOC, $parameter = null) 
   {
     if($this->stmt->rowCount() === 0)
-      return array();
+      return [];
     
     switch ($how) {
       case \Snabb\Database\Connection::FETCH_ASSOC:
       case \Snabb\Database\Connection::FETCH_NUM:
           return $this->stmt->fetchAll($how === \Snabb\Database\Connection::FETCH_ASSOC ? \PDO::FETCH_ASSOC : \PDO::FETCH_NUM);
       case \Snabb\Database\Connection::FETCH_COLUMN:
-        $data = array();
+        $data = [];
         while($data[] = $this->fetch(\Snabb\Database\Connection::FETCH_COLUMN, $parameter));
         array_pop($data);
         return $data;
       case \Snabb\Database\Connection::FETCH_ARRAY_KEY:
-        $data = array();
+        $data = [];
         foreach($this->fetchAll(\Snabb\Database\Connection::FETCH_ASSOC) as $row) {
           $data[$value[$parameter]] = $row;
           unset($data[$row[$parameter]][$parameter]);

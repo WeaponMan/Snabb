@@ -7,7 +7,7 @@ class Result implements \Snabb\Database\Result, \Iterator
   private $stack_position = 0;
   private $result_stack;
   private $position = 0;
-  private $data_iterable = array();
+  private $data_iterable = [];
   
   public function __construct($results) 
   {
@@ -35,7 +35,7 @@ class Result implements \Snabb\Database\Result, \Iterator
   public function fetchAll($how = \Snabb\Database\Connection::FETCH_ASSOC, $parameter = null) 
   {
     if(mysql_num_rows($this->result_stack[$this->stack_position]) === 0)
-      return array();
+      return [];
     
     switch ($how) {
       case \Snabb\Database\Connection::FETCH_ASSOC:
@@ -43,12 +43,12 @@ class Result implements \Snabb\Database\Result, \Iterator
           while ($row = $this->fetch($how)) $rows[] = $row;
           return $rows;
       case \Snabb\Database\Connection::FETCH_COLUMN:
-        $data = array();
+        $data = [];
         while($data[] = $this->fetch(\Snabb\Database\Connection::FETCH_COLUMN, $parameter));
         array_pop($data);
         return $data;
       case \Snabb\Database\Connection::FETCH_ARRAY_KEY:
-        $data = array();
+        $data = [];
         foreach($this->fetchAll(\Snabb\Database\Connection::FETCH_ASSOC) as $row) {
           $data[$value[$parameter]] = $row;
           unset($data[$row[$parameter]][$parameter]);

@@ -9,7 +9,7 @@ final class Result implements \Snabb\Database\Result, \Iterator {
   private $mysqli;
   private $mysqli_result;
   private $position = 0;
-  private $data_iterable = array();
+  private $data_iterable = [];
 
   public function __construct(\mysqli $db) {
     $this->position = 0;
@@ -56,14 +56,14 @@ final class Result implements \Snabb\Database\Result, \Iterator {
 
   public function fetchAll($how = \Snabb\Database\Connection::FETCH_ASSOC, $parameter = null) {
     if($this->mysqli_result->num_rows === 0)
-      return array();
+      return [];
     
     switch ($how) {
       case \Snabb\Database\Connection::FETCH_ASSOC:
       case \Snabb\Database\Connection::FETCH_NUM:
         if(method_exists($this->mysqli_result, 'fetch_all'))
           return $this->mysqli_result->fetch_all($how === \Snabb\Database\Connection::FETCH_ASSOC ? MYSQLI_ASSOC : MYSQLI_NUM);
-        $data = array();
+        $data = [];
         if($how === \Snabb\Database\Connection::FETCH_ASSOC)
           while($data[] = $this->mysqli_result->fetch_assoc());
         else
@@ -71,12 +71,12 @@ final class Result implements \Snabb\Database\Result, \Iterator {
         array_pop($data);
         return $data;
       case \Snabb\Database\Connection::FETCH_COLUMN:
-        $data = array();
+        $data = [];
         while($data[] = $this->fetch(\Snabb\Database\Connection::FETCH_COLUMN, $parameter));
         array_pop($data);
         return $data;
       case \Snabb\Database\Connection::FETCH_ARRAY_KEY:
-        $data = array();
+        $data = [];
         foreach($this->fetchAll(\Snabb\Database\Connection::FETCH_ASSOC) as $row) {
           $data[$value[$parameter]] = $row;
           unset($data[$row[$parameter]][$parameter]);

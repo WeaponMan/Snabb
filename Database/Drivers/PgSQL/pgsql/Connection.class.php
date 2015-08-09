@@ -11,7 +11,7 @@ class Connection extends \Snabb\Database\Connection
 {
   private $pg;
   
-  protected static $__getters = array('errmode', 'in_transaction','executedQueries');
+  protected static $__getters = ['errmode', 'in_transaction','executedQueries'];
   
   public function __construct($host, $user, $password, $database, $port = 5432, $errmode = self::ERRMODE_SILENT, $persistent = true) 
   {   
@@ -38,7 +38,7 @@ class Connection extends \Snabb\Database\Connection
 
   public function exec($sql) 
   {
-    $this->executedQueries[$sql] = array('type' => 'exec', 'duration' => - microtime(true), 'status' => 'OK');
+    $this->executedQueries[$sql] = ['type' => 'exec', 'duration' => - microtime(true), 'status' => 'OK'];
     $exec = pg_query($this->pg, $sql);
     $this->executedQueries[$sql]['duration'] += microtime(true);
     if($exec === false)
@@ -73,7 +73,7 @@ class Connection extends \Snabb\Database\Connection
 
   public function query($sql) 
   {
-    $this->executedQueries[$sql] = array('type' => 'query', 'duration' => - microtime(true), 'status' => 'OK');
+    $this->executedQueries[$sql] = ['type' => 'query', 'duration' => - microtime(true), 'status' => 'OK'];
     $query = pg_send_query($this->pg, $sql);
     $this->executedQueries[$sql]['duration'] += microtime(true);
     if($query === false)

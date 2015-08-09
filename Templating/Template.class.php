@@ -6,13 +6,13 @@ class Template {
   protected $tpl_dir;
   private $cache_dir;
   private $TPLCompiler;
-  protected $vars = array();
+  protected $vars = [];
   protected $autoescape_fn;
   protected $default_fn;
   protected $modifiers;
   
-  public function __construct($tpl_dir, $cache_dir, $default_fn = null, array $modifiers = array(), $autoescape_fn = null) {
-    list($this->tpl_dir, $this->cache_dir) = preg_replace('~[^/]$~Ds', '$0/', array($tpl_dir, $cache_dir));
+  public function __construct($tpl_dir, $cache_dir, $default_fn = null, array $modifiers = [], $autoescape_fn = null) {
+    list($this->tpl_dir, $this->cache_dir) = preg_replace('~[^/]$~Ds', '$0/', [$tpl_dir, $cache_dir]);
     $this->modifiers = $modifiers;
     if($autoescape_fn === null)
       $this->autoescape_fn = function($string) {

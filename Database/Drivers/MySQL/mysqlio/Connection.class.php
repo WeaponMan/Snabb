@@ -28,7 +28,7 @@ final class Connection extends \Snabb\Database\Connection {
   }
 
   public function query($sql) {
-    $this->executedQueries[$sql] = array('type' => 'query', 'duration' => - microtime(true), 'status' => 'OK');
+    $this->executedQueries[$sql] = ['type' => 'query', 'duration' => - microtime(true), 'status' => 'OK'];
     try {
       $this->mysqli->multi_query($sql);
       $this->executedQueries[$sql]['duration'] += microtime(true);
@@ -44,7 +44,7 @@ final class Connection extends \Snabb\Database\Connection {
   public function cachedQuery($sql, $seconds) {/*todo*/}
 
   public function exec($sql) {
-    $this->executedQueries[$sql] = array('type' => 'exec', 'duration' => - microtime(true), 'status' => 'OK');
+    $this->executedQueries[$sql] = ['type' => 'exec', 'duration' => - microtime(true), 'status' => 'OK'];
     try {
       $this->mysqli->real_query($sql);
       $this->executedQueries[$sql]['duration'] += microtime(true);

@@ -23,7 +23,7 @@ abstract class Connection {
   protected $errmode = self::ERRMODE_SILENT;
   protected $inTransaction = false;
   protected $originalErrmode;
-  protected $executedQueries = array();
+  protected $executedQueries = [];
   public $errorInfo;
   public $errorCode;
 

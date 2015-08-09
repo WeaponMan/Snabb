@@ -5,7 +5,7 @@ namespace Snabb\Tools;
 class Arrays {
 
     public static function &selective_keys(array $from, $keys) {
-        $return = array();
+        $return = [];
         foreach ((array) $keys as $key)
             $return[$key] = $from[$key];
         return $return;

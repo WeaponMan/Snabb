@@ -2,7 +2,7 @@
 
 trait PropertyReader {
   
-  protected static $readable_properties = array();
+  protected static $readable_properties = [];
   
   //todo call parent?
   public function __get($name) {

@@ -5,7 +5,7 @@ namespace Snabb\Database\Drivers\MySQL\mysql;
 class Connection extends \Snabb\Database\Connection {
 
   private $mysql;
-  protected static $__getters = array('errmode', 'in_transaction', 'executedQueries');
+  protected static $__getters = ['errmode', 'in_transaction', 'executedQueries'];
 
   public function __construct($host, $user, $password, $database, $port = 3306, $errmode = self::ERRMODE_SILENT, $persistent = true) {
     if ($persistent)
@@ -40,7 +40,7 @@ class Connection extends \Snabb\Database\Connection {
   }
 
   public function exec($sql) {
-    $this->executedQueries[$sql] = array('type' => 'exec', 'duration' => - microtime(true), 'status' => 'OK');
+    $this->executedQueries[$sql] = ['type' => 'exec', 'duration' => - microtime(true), 'status' => 'OK'];
     $query = mysql_query($sql, $this->mysql);
     $this->executedQueries[$sql]['duration'] += microtime(true);
     if (!$query) {
@@ -76,7 +76,7 @@ class Connection extends \Snabb\Database\Connection {
 
   public function query($sql) {
     $queries = $this->multiQuery($sql);
-    $exec_queries = array();
+    $exec_queries = [];
     foreach ($queries as $query)
     {
       $executed = $this->_query($query);
@@ -87,7 +87,7 @@ class Connection extends \Snabb\Database\Connection {
   }
 
   private function _query($sql) {
-    $this->executedQueries[$sql] = array('type' => 'query', 'duration' => - microtime(true), 'status' => 'OK');
+    $this->executedQueries[$sql] = ['type' => 'query', 'duration' => - microtime(true), 'status' => 'OK'];
     $query = mysql_query($sql, $this->mysql);
     $this->executedQueries[$sql]['duration'] += microtime(true);
     if (!$query) {
@@ -146,7 +146,7 @@ class Connection extends \Snabb\Database\Connection {
     $escChar = false;
     $sql = '';
     $stringChar = '';
-    $queryLine = array();
+    $queryLine = [];
     $sqlRows = explode("\n", $queryBlock);
     $delimiterLen = strlen($delimiter);
     do {
@@ -176,7 +176,7 @@ class Connection extends \Snabb\Database\Connection {
         if (substr($sqlRow, $i, $delimiterLen) === $delimiter and !$inString) 
         {
             $sql = trim($sql);
-            $delimiterMatch = array();
+            $delimiterMatch = [];
             if (preg_match('/^DELIMITER[[:space:]]*([^[:space:]] )$/i', $sql, $delimiterMatch)) {
               $delimiter = $delimiterMatch [1];
               $delimiterLen = strlen($delimiter);
@@ -193,7 +193,7 @@ class Connection extends \Snabb\Database\Connection {
     if($queryLine)
         return $queryLine;
     else
-        return array($queryBlock);
+        return [$queryBlock];
   }
   
   public function getDriverName() {

@@ -5,8 +5,8 @@ namespace Snabb\Database\Drivers\MySQL\mysql;
 final class PreparedStatement implements \Snabb\Database\PreparedStatement {
 
   private $name;
-  private $params = array();
-  private $params_order = array();
+  private $params = [];
+  private $params_order = [];
   private $db;
 
   public function __construct(namespace\Connection $db, $sql) {

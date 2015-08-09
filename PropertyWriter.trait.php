@@ -2,7 +2,7 @@
 
 trait PropertyWriter {
   
-  protected static $writable_properties = array();
+  protected static $writable_properties = [];
   
   //todo call parent?
   public function __set($name, $value) {

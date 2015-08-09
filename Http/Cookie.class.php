@@ -7,7 +7,7 @@ namespace Snabb\Http;
 
 final class Cookie extends \Snabb\StaticClass {
   
-  private static $initialized = false, $data = array();
+  private static $initialized = false, $data = [];
   
   public static function init() {
     if(!self::$initialized && isset($_COOKIE) && is_array($_COOKIE)) {

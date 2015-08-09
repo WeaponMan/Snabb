@@ -11,14 +11,14 @@ class Connection extends \Snabb\Database\Connection
 {
   private $pdo;
   
-  protected static $__getters = array('errmode', 'in_transaction','executedQueries');
+  protected static $__getters = ['errmode', 'in_transaction','executedQueries'];
   
   public function __construct($host, $user, $password, $database, $port = 3306, $errmode = self::ERRMODE_SILENT, $persistent = true) 
   {
     try
     {
       $this->pdo = new \PDO('mysql:host='.$host.';dbname='.$database.';port='.$port,$user,$password,
-              array(\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'',\PDO::ATTR_PERSISTENT => $persistent));
+              [\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'',\PDO::ATTR_PERSISTENT => $persistent]);
     } 
     catch (\PDOException $e)
     {
@@ -48,7 +48,7 @@ class Connection extends \Snabb\Database\Connection
 
   public function exec($sql) 
   {
-    $this->executedQueries[$sql] = array('type' => 'exec', 'duration' => - microtime(true), 'status' => 'OK');
+    $this->executedQueries[$sql] = ['type' => 'exec', 'duration' => - microtime(true), 'status' => 'OK'];
     try
     {
       $exec = $this->pdo->exec($sql);
@@ -90,7 +90,7 @@ class Connection extends \Snabb\Database\Connection
 
   public function query($sql) 
   {
-    $this->executedQueries[$sql] = array('type' => 'query', 'duration' => - microtime(true), 'status' => 'OK');
+    $this->executedQueries[$sql] = ['type' => 'query', 'duration' => - microtime(true), 'status' => 'OK'];
     try
     {
       $query = $this->pdo->query($sql);

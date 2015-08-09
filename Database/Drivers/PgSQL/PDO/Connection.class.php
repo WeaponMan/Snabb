@@ -11,14 +11,14 @@ class Connection extends \Snabb\Database\Connection
 {
   private $pdo;
   
-  protected static $__getters = array('errmode', 'in_transaction','executedQueries');
+  protected static $__getters = ['errmode', 'in_transaction','executedQueries'];
   
   public function __construct($host, $user, $password, $database, $port = 5432, $errmode = self::ERRMODE_SILENT, $persistent = true) 
   {
     try
     {
       $this->pdo = new \PDO('pgsql:host='.$host.';dbname='.$database.';port='.$port,$user,$password,
-              array(\PDO::ATTR_PERSISTENT => $persistent));
+              [\PDO::ATTR_PERSISTENT => $persistent]);
     } 
     catch (\PDOException $e)
     {
@@ -45,7 +45,7 @@ class Connection extends \Snabb\Database\Connection
 
   public function exec($sql) 
   {
-    $this->executedQueries[$sql] = array('type' => 'exec', 'duration' => - microtime(true), 'status' => 'OK');
+    $this->executedQueries[$sql] = ['type' => 'exec', 'duration' => - microtime(true), 'status' => 'OK'];
     try
     {
       $exec = $this->pdo->exec($sql);
@@ -65,7 +65,7 @@ class Connection extends \Snabb\Database\Connection
   {
     $sql = 'INSERT INTO '.$this->backtick($table_name);
     if(\Snabb\Tools\Arrays::is_assoc($data))
-      return $this->exec($sql.'('.implode(', ', $this->bactickArrayValues(array_keys($data[0]))).') VALUES('.implode(', ', $this->quoteArrayValues($data)).');');
+      return $this->exec($sql.'('.implode(', ', $this->bactickArrayValues(array_keys($data))).') VALUES('.implode(', ', $this->quoteArrayValues($data)).');');
     if(is_array($data[0])) {
       if(\Snabb\Tools\Arrays::is_assoc($data[0]))
         $sql .= '('.implode(', ', $this->bactickArrayValues(array_keys($data[0]))).')';
@@ -84,7 +84,7 @@ class Connection extends \Snabb\Database\Connection
 
   public function query($sql) 
   {
-    $this->executedQueries[$sql] = array('type' => 'query', 'duration' => - microtime(true), 'status' => 'OK');
+    $this->executedQueries[$sql] = ['type' => 'query', 'duration' => - microtime(true), 'status' => 'OK'];
     try
     {
       $query = $this->pdo->query($sql);

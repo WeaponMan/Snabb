@@ -11,7 +11,7 @@ final class Connection extends \Snabb\Database\Connection {
 
   private $mysqli;
 
-  protected static $__getters = array('errmode', 'in_transaction','executedQueries');
+  protected static $__getters = ['errmode', 'in_transaction','executedQueries'];
 
   public function __construct($host, $user, $password, $database, $port = 3306, $errmode = self::ERRMODE_SILENT, $persistent = true) {
     mysqli_report(3);
@@ -25,23 +25,12 @@ final class Connection extends \Snabb\Database\Connection {
     mysqli_set_charset($this->mysqli,'utf8');
   }
 
-/* asi neni potĹ™eba zatim, volala by se jen jednou
-  private function mysqliSafeMethodCall($method_name, $params) {
-    try {
-      return call_user_func_array(array($this->mysqli, $method_name), (array)$params);
-    }
-    catch(\mysqli_sql_exception $e) {
-      $this->processError($e->getMessage(), $e->getCode());
-    }
-  }
- */
-
   public function prepare($sql) {
     return new namespace\PreparedStatement($this, $sql);
   }
 
   public function query($sql) {
-    $this->executedQueries[$sql] = array('type' => 'query', 'duration' => - microtime(true), 'status' => 'OK');
+    $this->executedQueries[$sql] = ['type' => 'query', 'duration' => - microtime(true), 'status' => 'OK'];
     try {
       mysqli_multi_query($this->mysqli,$sql);
       $this->executedQueries[$sql]['duration'] += microtime(true);
@@ -57,7 +46,7 @@ final class Connection extends \Snabb\Database\Connection {
   public function cachedQuery($sql, $seconds) {/*todo*/}
 
   public function exec($sql) {
-    $this->executedQueries[$sql] = array('type' => 'exec', 'duration' => - microtime(true), 'status' => 'OK');
+    $this->executedQueries[$sql] = ['type' => 'exec', 'duration' => - microtime(true), 'status' => 'OK'];
     try {
       mysqli_real_query($this->mysqli,$sql);
       $this->executedQueries[$sql]['duration'] += microtime(true);
